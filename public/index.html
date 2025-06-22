@@ -1,242 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <title>ms-ra-forwarder</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    .dropdown-toggle::after {
+      margin-left: 0.5em;
+    }
+  </style>
 </head>
-
 <body>
   <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
       <a class="navbar-brand" target="_blank" href="https://github.com/meetcw/ms-ra-forwarder">ms-ra-forwarder</a>
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="github-button" href="https://github.com/meetcw/ms-ra-forwarder" data-size="large"
-            data-show-count="true" aria-label="Star meetcw/ms-ra-forwarder on GitHub">Star</a>
-        </li>
-      </ul>
+      <div class="d-flex align-items-center">
+        <div class="dropdown me-3">
+          <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="langDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false">🌐 English</button>
+          <ul class="dropdown-menu" aria-labelledby="langDropdownBtn">
+            <li><a class="dropdown-item" href="#" onclick="setLang('en')">English</a></li>
+            <li><a class="dropdown-item" href="#" onclick="setLang('zh')">中文</a></li>
+          </ul>
+        </div>
+        <a class="github-button" href="https://github.com/meetcw/ms-ra-forwarder" data-size="large" data-show-count="true" aria-label="Star meetcw/ms-ra-forwarder on GitHub">Star</a>
+      </div>
     </div>
   </nav>
-  <div class="container" style="margin-top: 30px;">
+
+  <div class="container mt-4">
     <form>
-      <div class="row">
-        <div class="col">
-          <label for="name" class="form-label">配置名称：</label>
-          <input name="name" type="text" class="form-control" value="大声朗读" />
-          <div class="form-text">在阅读APP中显示的名称。</div>
+      <div class="mb-3">
+        <label for="name" class="form-label" data-i18n="config_name">Configuration Name:</label>
+        <input name="name" type="text" class="form-control" value="Loud Reading" />
+        <div class="form-text" data-i18n="config_name_note">Displayed name in the reading app.</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="voiceName" class="form-label" data-i18n="voice">Voice:</label>
+        <select name="voiceName" class="form-select" onchange="updateConfigName()"></select>
+        <div class="form-text" data-i18n="voice_note">The voice list may take a moment to load.</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="voiceFormat" class="form-label" data-i18n="audio_format">Audio Format:</label>
+        <select name="voiceFormat" class="form-select">
+          <!-- 所有原始格式项 -->
+          <option value="raw-16khz-16bit-mono-pcm">raw-16khz-16bit-mono-pcm</option>
+          <option value="raw-48khz-16bit-mono-pcm">raw-48khz-16bit-mono-pcm</option>
+          <option value="raw-8khz-8bit-mono-mulaw">raw-8khz-8bit-mono-mulaw</option>
+          <option value="raw-8khz-8bit-mono-alaw">raw-8khz-8bit-mono-alaw</option>
+          <option value="raw-16khz-16bit-mono-truesilk">raw-16khz-16bit-mono-truesilk</option>
+          <option value="raw-24khz-16bit-mono-truesilk">raw-24khz-16bit-mono-truesilk</option>
+          <option value="riff-16khz-16bit-mono-pcm">riff-16khz-16bit-mono-pcm</option>
+          <option value="riff-24khz-16bit-mono-pcm">riff-24khz-16bit-mono-pcm</option>
+          <option value="riff-48khz-16bit-mono-pcm">riff-48khz-16bit-mono-pcm</option>
+          <option value="riff-8khz-8bit-mono-mulaw">riff-8khz-8bit-mono-mulaw</option>
+          <option value="riff-8khz-8bit-mono-alaw">riff-8khz-8bit-mono-alaw</option>
+          <option value="audio-16khz-32kbitrate-mono-mp3">audio-16khz-32kbitrate-mono-mp3</option>
+          <option value="audio-16khz-64kbitrate-mono-mp3">audio-16khz-64kbitrate-mono-mp3</option>
+          <option value="audio-16khz-128kbitrate-mono-mp3">audio-16khz-128kbitrate-mono-mp3</option>
+          <option value="audio-24khz-48kbitrate-mono-mp3">audio-24khz-48kbitrate-mono-mp3</option>
+          <option value="audio-24khz-96kbitrate-mono-mp3">audio-24khz-96kbitrate-mono-mp3</option>
+          <option value="audio-24khz-160kbitrate-mono-mp3">audio-24khz-160kbitrate-mono-mp3</option>
+          <option value="audio-48khz-96kbitrate-mono-mp3">audio-48khz-96kbitrate-mono-mp3</option>
+          <option value="audio-48khz-192kbitrate-mono-mp3">audio-48khz-192kbitrate-mono-mp3</option>
+          <option value="webm-16khz-16bit-mono-opus">webm-16khz-16bit-mono-opus</option>
+          <option value="webm-24khz-16bit-mono-opus" selected>webm-24khz-16bit-mono-opus</option>
+          <option value="ogg-16khz-16bit-mono-opus">ogg-16khz-16bit-mono-opus</option>
+          <option value="ogg-24khz-16bit-mono-opus">ogg-24khz-16bit-mono-opus</option>
+          <option value="ogg-48khz-16bit-mono-opus">ogg-48khz-16bit-mono-opus</option>
+        </select>
+        <div class="form-text">
+          <p data-i18n="format_note1">You can adjust the format and quality. Higher quality results in larger files.</p>
+          <p data-i18n="format_note2">If you see “Unsupported output format: XXX”, it means it’s not supported.</p>
         </div>
       </div>
-      <div class="row">
-        <div class="col">
-          <label for="voiceName" class="form-label">声音：</label>
-          <select name="voiceName" class="form-select" onchange="updateConfigName()">
-          </select>
-          <div class="form-text">声音列表加载可能有点慢，请耐心等待！</div>
-        </div>
+
+      <div class="mb-3">
+        <label for="token" class="form-label" data-i18n="token">Token:</label>
+        <input name="token" class="form-control" type="text" />
+        <div class="form-text" data-i18n="token_note">Leave blank if not set.</div>
       </div>
-      <div class="row">
-        <div class="col">
-          <label for="voiceFormat" class="form-label">音频格式：</label>
-          <select name="voiceFormat" class="form-select">
-            <option value="raw-16khz-16bit-mono-pcm">raw-16khz-16bit-mono-pcm</option>
-            <option value="raw-48khz-16bit-mono-pcm">raw-48khz-16bit-mono-pcm</option>
-            <option value="raw-8khz-8bit-mono-mulaw">raw-8khz-8bit-mono-mulaw</option>
-            <option value="raw-8khz-8bit-mono-alaw">raw-8khz-8bit-mono-alaw</option>
-            <option value="raw-16khz-16bit-mono-truesilk">raw-16khz-16bit-mono-truesilk</option>
-            <option value="raw-24khz-16bit-mono-truesilk">raw-24khz-16bit-mono-truesilk</option>
-            <option value="riff-16khz-16bit-mono-pcm">riff-16khz-16bit-mono-pcm</option>
-            <option value="riff-24khz-16bit-mono-pcm">riff-24khz-16bit-mono-pcm</option>
-            <option value="riff-48khz-16bit-mono-pcm">riff-48khz-16bit-mono-pcm</option>
-            <option value="riff-8khz-8bit-mono-mulaw">riff-8khz-8bit-mono-mulaw</option>
-            <option value="riff-8khz-8bit-mono-alaw">riff-8khz-8bit-mono-alaw</option>
-            <option value="audio-16khz-32kbitrate-mono-mp3">audio-16khz-32kbitrate-mono-mp3</option>
-            <option value="audio-16khz-64kbitrate-mono-mp3">audio-16khz-64kbitrate-mono-mp3</option>
-            <option value="audio-16khz-128kbitrate-mono-mp3">audio-16khz-128kbitrate-mono-mp3</option>
-            <option value="audio-24khz-48kbitrate-mono-mp3">audio-24khz-48kbitrate-mono-mp3</option>
-            <option value="audio-24khz-96kbitrate-mono-mp3">audio-24khz-96kbitrate-mono-mp3</option>
-            <option value="audio-24khz-160kbitrate-mono-mp3">audio-24khz-160kbitrate-mono-mp3</option>
-            <option value="audio-48khz-96kbitrate-mono-mp3">audio-48khz-96kbitrate-mono-mp3</option>
-            <option value="audio-48khz-192kbitrate-mono-mp3">audio-48khz-192kbitrate-mono-mp3</option>
-            <option value="webm-16khz-16bit-mono-opus">webm-16khz-16bit-mono-opus</option>
-            <option value="webm-24khz-16bit-mono-opus" selected>webm-24khz-16bit-mono-opus</option>
-            <option value="ogg-16khz-16bit-mono-opus">ogg-16khz-16bit-mono-opus</option>
-            <option value="ogg-24khz-16bit-mono-opus">ogg-24khz-16bit-mono-opus</option>
-            <option value="ogg-48khz-16bit-mono-opus">ogg-48khz-16bit-mono-opus</option>
-          </select>
-          <div class="form-text">
-            <p>可以调整音频的格式和质量。质量越高，生成的文件越大，对网速和流量的需求越高。请根据自己的情况选择。</p>
-            <p>如果出现 “Unsupported output format: XXX” 错误，表示不支持当前格式。</p>
-          </div>
-        </div>
 
-        <div class="row">
-          <div>
-            <label for="token" class="form-label">凭据（TOKEN）：</label>
-            <input name="token" class="form-control" type="text" value="">
-            <div class="form-text">如果没有设置 TOKEN 环境变量请留空。</div>
-          </div>
-        </div>
+      <div class="mb-3">
+        <label for="previewText" class="form-label" data-i18n="test_text">Test Text:</label>
+        <textarea name="previewText" class="form-control" rows="3">If you like this project, please star it.</textarea>
+      </div>
 
-        <div class="row">
-          <div class="col">
-            <label for="previewText" class="form-label">测试文本：</label>
-            <textarea name="previewText" class="form-control" rows="3" cols="">如果喜欢这个项目的话请点个 Star 吧。</textarea>
-          </div>
-        </div>
-        <div style="height:20px"></div>
-        <div class="row">
-          <div class="col">
-            <button id="previewButton" type="button" class="btn btn-secondary" onclick="preview()">测试</button>
-            <button type="button" class="btn btn-primary" onclick='createLegadoUrl()'>生成阅读（legado）语音引擎链接</button>
-          </div>
-        </div>
+      <div class="mb-3">
+        <button id="previewButton" type="button" class="btn btn-secondary" onclick="preview()" data-i18n="test_button">Test</button>
+        <button type="button" class="btn btn-primary" onclick="createLegadoUrl()" data-i18n="generate_url">Generate Legado Link</button>
+      </div>
     </form>
-    <div style="height:50px"></div>
   </div>
 
-
-  <div id="legadoUrlModal" class="modal " tabindex="-1">
-    <div class="modal-dialog modal-lg">
+  <!-- Modal -->
+  <div class="modal fade" id="legadoUrlModal" tabindex="-1" aria-labelledby="legadoUrlModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">阅读链接</h5>
+          <h5 class="modal-title" id="legadoUrlModalLabel" data-i18n="modal_title">Legado Link QR Code</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
-          <div id="legadoUrlQRCode" style="text-align:center">
-          </div>
-          <div class="row">
-            <textarea id="legadoUrl" class="form-control" readonly rows="3" cols="2" value></textarea>
-          </div>
-          <div class="row" style="margin-top: 10px;">
-            <a id="legadoImportButton" class="btn btn-primary" href="">一键导入到阅读</a>
-          </div>
+        <div class="modal-body text-center">
+          <div id="legadoUrlQRCode" class="mb-3"></div>
+          <textarea id="legadoUrl" class="form-control" rows="3" readonly style="resize: vertical;"></textarea>
+        </div>
+        <div class="modal-footer">
+          <a id="legadoImportButton" class="btn btn-primary" href="#" data-i18n="open_in_legado">Open in Legado</a>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-i18n="close">Close</button>
         </div>
       </div>
     </div>
   </div>
-  <script async defer src="https://buttons.github.io/buttons.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode-svg@1.1.0/lib/qrcode.min.js"></script>
-  <script>
-    let voices = [];
-    fetch('https://speech.platform.bing.com/consumer/speech/synthesize/readaloud/voices/list?trustedclienttoken=6A5AA1D4EAFF4E9FB37E23D68491D6F4')
-      .then(response => {
-        if (response.status == 200) {
-          return response.json();
-        } else {
-          console.log(response);
-          return response.text().then(text => Promise.reject(text));
-        }
-      }).then(data => {
-        voices = data;
-        refreshVoice();
-      }).catch(reason => {
-        alert(reason);
-      });
 
-    function refreshVoice() {
-      let voiceElelement = document.getElementsByName('voiceName')[0];
-      voiceElelement.innerHTMl = '';
-      voices.forEach(item => {
-        let option = document.createElement('option');
-        option.value = item['ShortName'];
-        option.innerText = item['FriendlyName'];
-        if (item['ShortName'] == 'zh-CN-XiaoxiaoNeural') {
-          option.selected = true;
-        }
-        voiceElelement.append(option)
+  <script src="https://buttons.github.io/buttons.js" async defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-svg@1.1.0/lib/qrcode.min.js"></script>
+
+  <script>
+    let currentLang = "en";
+    const i18n = {
+      en: {
+        config_name: "Configuration Name:",
+        config_name_note: "Displayed name in the reading app.",
+        voice: "Voice:",
+        voice_note: "The voice list may take a moment to load.",
+        audio_format: "Audio Format:",
+        format_note1: "You can adjust the format and quality. Higher quality results in larger files.",
+        format_note2: "If you see “Unsupported output format: XXX”, it means it’s not supported.",
+        token: "Token:",
+        token_note: "Leave blank if not set.",
+        test_text: "Test Text:",
+        test_button: "Test",
+        generate_url: "Generate Legado Link",
+        modal_title: "Legado Link QR Code",
+        open_in_legado: "Open in Legado",
+        close: "Close",
+        preview_textarea: "If you like this project, please star it."
+      },
+      zh: {
+        config_name: "配置名称：",
+        config_name_note: "在阅读APP中显示的名称。",
+        voice: "声音：",
+        voice_note: "声音列表加载可能有点慢，请耐心等待。",
+        audio_format: "音频格式：",
+        format_note1: "可以调整音频的格式和质量。质量越高，生成的文件越大，对网速和流量的需求越高。请根据自己的情况选择。",
+        format_note2: "如果出现 “Unsupported output format: XXX” 错误，表示不支持当前格式。",
+        token: "凭据（TOKEN）：",
+        token_note: "如果没有设置 TOKEN 环境变量请留空。",
+        test_text: "测试文本：",
+        test_button: "测试",
+        generate_url: "生成阅读（legado）语音引擎链接",
+        modal_title: "阅读链接",
+        open_in_legado: "打开阅读APP",
+        close: "关闭",
+        preview_textarea: "如果喜欢这个项目的话请点个 Star 吧。"
+      }
+    };
+
+    function setLang(lang) {
+      currentLang = lang;
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.dataset.i18n;
+        if (i18n[currentLang][key]) el.innerText = i18n[currentLang][key];
       });
+      document.getElementsByName("previewText")[0].value = i18n[currentLang].preview_textarea;
+      document.getElementById("langDropdownBtn").innerText = lang === "zh" ? "🌐 中文" : "🌐 English";
       updateConfigName();
     }
 
     function updateConfigName() {
-      let voice = document.getElementsByName('voiceName')[0].value;
-      document.getElementsByName('name')[0].value = '大声朗读（' + voice + '）';
+      const voice = document.getElementsByName("voiceName")[0].value;
+      document.getElementsByName("name")[0].value = currentLang === "zh" ? `大声朗读（${voice}）` : `Loud Reading (${voice})`;
     }
 
-    function createSSML(text, voiceName) {
-      text = text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('\'', '&apos;').replaceAll('"', '&quot;');
-      let ssml = '\
-        <speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xmlns:emo="http://www.w3.org/2009/10/emotionml" version="1.0" xml:lang="en-US">\
-          <voice name="'+ voiceName + '">\
-              <prosody rate="0%" pitch="0%">\
-                  '+ text + '\
-              </prosody >\
-          </voice >\
-        </speak > '
+    fetch("https://speech.platform.bing.com/consumer/speech/synthesize/readaloud/voices/list?trustedclienttoken=6A5AA1D4EAFF4E9FB37E23D68491D6F4")
+      .then(r => r.ok ? r.json() : r.text().then(Promise.reject))
+      .then(data => {
+        const select = document.getElementsByName("voiceName")[0];
+        select.innerHTML = "";
+        data.forEach(voice => {
+          const opt = document.createElement("option");
+          opt.value = voice.ShortName;
+          opt.innerText = voice.FriendlyName;
+          if (voice.ShortName === "zh-CN-XiaoxiaoNeural") opt.selected = true;
+          select.appendChild(opt);
+        });
+        updateConfigName();
+      })
+      .catch(e => alert(e));
 
-      return ssml;
+    function createSSML(text, voiceName) {
+      return `<speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xmlns:emo="http://www.w3.org/2009/10/emotionml" version="1.0" xml:lang="en-US"><voice name="${voiceName}"><prosody rate="0%" pitch="0%">${text}</prosody></voice></speak>`;
     }
 
     function preview() {
-      let headers = { 'Content-Type': 'text/plain' };
-      let voiceName = document.getElementsByName('voiceName')[0].value;
-      let voiceFormat = document.getElementsByName('voiceFormat')[0].value;
-      let token = document.getElementsByName('token')[0].value;
-      let previewText = document.getElementsByName('previewText')[0].value;
-      let ssml = createSSML(previewText, voiceName)
-      if (token) {
-        headers['Authorization'] = 'Bearer ' + token;
-      }
+      let headers = { "Content-Type": "text/plain" };
+      let voiceName = document.getElementsByName("voiceName")[0].value;
+      let voiceFormat = document.getElementsByName("voiceFormat")[0].value;
+      let token = document.getElementsByName("token")[0].value;
+      let previewText = document.getElementsByName("previewText")[0].value;
+      let ssml = createSSML(previewText, voiceName);
+      if (token) headers["Authorization"] = "Bearer " + token;
+      headers["Format"] = voiceFormat;
 
-      headers['Format'] = voiceFormat;
-
-      let button = document.getElementById('previewButton');
+      let button = document.getElementById("previewButton");
       button.disabled = true;
       let ctx = new AudioContext();
-      fetch('/api/ra', {
-        method: 'post',
+      fetch("/api/ra", {
+        method: "post",
         headers: headers,
         body: ssml
-      }).then(response => {
-        if (response.status == 200) {
-          return response.arrayBuffer()
-        } else if (response.status == 401) {
-          throw '无效的密钥';
-        } else {
-          return response.text().then(text => Promise.reject(text));
-        }
-      }).then(arrayBuffer => ctx.decodeAudioData(arrayBuffer))
+      })
+        .then(r => r.status === 200 ? r.arrayBuffer() : r.text().then(Promise.reject))
+        .then(buffer => ctx.decodeAudioData(buffer))
         .then(audio => {
-          let player = ctx.createBufferSource();
-          player.buffer = audio;
-          player.connect(ctx.destination);
-          player.start(ctx.currentTime);
+          let source = ctx.createBufferSource();
+          source.buffer = audio;
+          source.connect(ctx.destination);
+          source.start();
         })
-        .catch(reason => {
-          alert(reason);
-        })
-        .finally(() => {
-          button.disabled = false;
-        });
+        .catch(alert)
+        .finally(() => button.disabled = false);
     }
 
     function createLegadoUrl() {
-      let name = document.getElementsByName('name')[0].value;
-      let voiceName = document.getElementsByName('voiceName')[0].value;
-      let voiceFormat = document.getElementsByName('voiceFormat')[0].value;
-      let token = document.getElementsByName('token')[0].value;
-      let previewText = document.getElementsByName('previewText')[0].value;
-      let url = window.location.protocol + '//' + window.location.host + '/api/legado?api=' + encodeURIComponent(window.location.protocol + '//' + window.location.host + '/api/ra')
-        + '&name=' + encodeURIComponent(name)
-        + '&voiceName=' + encodeURIComponent(voiceName)
-        + '&voiceFormat=' + encodeURIComponent(voiceFormat)
-        + '&token=' + encodeURIComponent(token);
+      let name = document.getElementsByName("name")[0].value;
+      let voiceName = document.getElementsByName("voiceName")[0].value;
+      let voiceFormat = document.getElementsByName("voiceFormat")[0].value;
+      let token = document.getElementsByName("token")[0].value;
+      let url = `${location.protocol}//${location.host}/api/legado?api=${encodeURIComponent(location.protocol + "//" + location.host + "/api/ra")}&name=${encodeURIComponent(name)}&voiceName=${encodeURIComponent(voiceName)}&voiceFormat=${encodeURIComponent(voiceFormat)}&token=${encodeURIComponent(token)}`;
       let svg = new QRCode(url).svg();
-      let modal = new bootstrap.Modal(document.getElementById('legadoUrlModal'))
-      modal.show();
-      document.getElementById('legadoUrlQRCode').innerHTML = svg;
-      document.getElementById('legadoUrl').value = url;
-      document.getElementById('legadoImportButton').href = 'legado://import/httpTTS?src=' + encodeURIComponent(url);
+      new bootstrap.Modal(document.getElementById("legadoUrlModal")).show();
+      document.getElementById("legadoUrlQRCode").innerHTML = svg;
+      document.getElementById("legadoUrl").value = url;
+      document.getElementById("legadoImportButton").href = "legado://import/httpTTS?src=" + encodeURIComponent(url);
     }
+
+    // 默认语言初始化
+    setLang("en");
   </script>
 </body>
-
 </html>
