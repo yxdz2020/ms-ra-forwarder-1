@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script>
+    // --- START: 之前的 Polyfill 修复代码，请保留 ---
     if (!Promise.allSettled) {
       Promise.allSettled = function(promises) {
         return Promise.all(
@@ -197,7 +198,7 @@
     }
 
     fetch("https://speech.platform.bing.com/consumer/speech/synthesize/readaloud/voices/list?trustedclienttoken=6A5AA1D4EAFF4E9FB37E23D68491D6F4")
-      .then(r => r.ok ? r.json() : r.text().then(Promise.reject))
+      .then(r => r.ok ? r.json() : r.text().then(text => Promise.reject(new Error(text)))) // <--- [修复点 1]
       .then(data => {
         const select = document.getElementsByName("voiceName")[0];
         select.innerHTML = "";
@@ -234,7 +235,7 @@
         headers: headers,
         body: ssml
       })
-        .then(r => r.status === 200 ? r.arrayBuffer() : r.text().then(Promise.reject))
+        .then(r => r.status === 200 ? r.arrayBuffer() : r.text().then(text => Promise.reject(new Error(text)))) // <--- [修复点 2]
         .then(buffer => ctx.decodeAudioData(buffer))
         .then(audio => {
           let source = ctx.createBufferSource();
@@ -261,7 +262,6 @@
 
     // 默认语言初始化
     setLang("en");
-  </script>
+</script>
 </body>
 </html>
-
